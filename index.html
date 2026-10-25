@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>NileFitPro — المنظومة التفاعلية للتغذية الذكية (66,880+ وجبة)، التمارين الميكانيكية 100%، والزاد الإيماني</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Realistic Dynamic Sky Canvas (Sunrise, Day Sun, Sunset, Night Moon & Stars, Clouds, Multi-Level Rain) -->
+  <canvas id="skyCanvas"></canvas>
+  <div class="sky-overlay"></div>
+
+  <!-- Top Islamic Reminders (Mon/Thu, White Days 13-14-15, Sacred Months & Fasting Seasons) & Top Live Broadcasts (Cairo Quran Radio + Sunnah TV Live + Makkah Quran TV Live) -->
+  <div class="top-fasting-ribbon">
+    <div class="fasting-badges">
+      <span id="fastMonThuBadge" class="badge-pill" data-i18n="fastMonThu">🌙 تذكير سنة صيام الإثنين والخميس</span>
+      <span id="fastWhiteDaysBadge" class="badge-pill emerald" data-i18n="fastWhiteDays">🌕 تذكير صيام الأيام البيض (13 و14 و15 من كل شهر هجري)</span>
+      <button class="ctrl-btn gold-btn" style="padding:4px 11px; font-size:0.78rem; border-radius:999px;" onclick="toggleTopSacredBoard()">
+        🕋 لوحة الأشهر الحُرُم الأربعة وعرفة وعاشوراء وشوال (إظهار/إخفاء)
+      </button>
+      <span id="currentSkyPhaseLabel" class="badge-pill">🌙 الليل والنجوم والفجر</span>
+    </div>
+
+    <!-- Top Live Audio Broadcasts Cluster: Cairo Holy Quran Radio + Sunnah Nabawiyyah Channel Live Audio (كصوت في أعلى الموقع) -->
+    <div class="top-live-broadcasts-cluster">
+      <!-- 1. Live Cairo Holy Quran Radio Player (صوت مباشر) -->
+      <div class="cairo-radio-widget">
+        <div class="radio-live-dot"></div>
+        <strong style="font-size:0.82rem;" data-i18n="cairoRadio">📻 راديو إذاعة القرآن الكريم بالقاهرة</strong>
+        <button id="cairoRadioToggleBtn" class="ctrl-btn gold-btn" style="padding:4px 10px; font-size:0.78rem;">
+          ▶️ تشغيل الإذاعة
+        </button>
+        <input id="cairoRadioVolume" type="range" min="0" max="1" step="0.05" value="0.85" style="width:62px; cursor:pointer;" title="مستوى صوت راديو القرآن الكريم بالقاهرة" />
+        <audio id="cairoRadioAudio" preload="none"></audio>
+      </div>
+
+      <!-- 2. Live Broadcast | Sunnah Nabawiyyah Channel AS AUDIO in Top of Site (بث مباشر | قناة السنة النبوية كصوت في أعلى الموقع) -->
+      <div class="cairo-radio-widget sunnah-audio-widget" style="border-color:rgba(52, 211, 153, 0.65); background:linear-gradient(135deg, rgba(5, 150, 105, 0.28), rgba(15, 23, 42, 0.85));">
+        <div class="radio-live-dot" style="background:#10b981; box-shadow:0 0 8px #10b981;"></div>
+        <strong style="font-size:0.82rem; color:#a7f3d0;" data-i18n="sunnahRadio">🕌 بث مباشر | قناة السنة النبوية (صوت)</strong>
+        <button id="sunnahAudioToggleBtn" class="ctrl-btn active" style="padding:4px 10px; font-size:0.78rem;">
+          ▶️ تشغيل البث الصوتي
+        </button>
+        <input id="sunnahAudioVolume" type="range" min="0" max="1" step="0.05" value="0.85" style="width:62px; cursor:pointer;" title="مستوى صوت بث قناة السنة النبوية" />
+        <audio id="sunnahLiveAudio" preload="none"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear Board at the Top of the Site: The 4 Sacred Months & Fasting Reminders (لوحة واضحة في أعلى الموقع) -->
+  <section id="topSacredMonthsClearBoard" class="top-sacred-clear-board">
+    <div class="top-sacred-board-container">
+      <div class="top-sacred-board-header">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span class="badge-pill active-fast">🕋 لوحة الأشهر الحُرُم الأربعة ومواسم الصيام في أعلى الموقع</span>
+          <strong style="color:#fde68a; font-size:0.95rem;">
+            قال الله تعالى في سورة التوبة، الآية 36: ﴿ إِنَّ عِدَّةَ الشُّهُورِ عِندَ اللَّهِ اثْنَا عَشَرَ شَهْرًا فِي كِتَابِ اللَّهِ يَوْمَ خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ مِنْهَا أَرْبَعَةٌ حُرُمٌ ۚ ذَٰلِكَ الدِّينُ الْقَيِّمُ ۚ فَلَا تَظْلِمُوا فِيهِنَّ أَنفُسَكُمْ ﴾
+          </strong>
+        </div>
+        <button class="ctrl-btn" style="padding:3px 10px; font-size:0.76rem;" onclick="toggleTopSacredBoard()">🔼 طيّ / توسيع اللوحة</button>
+      </div>
+
+      <div id="topSacredBoardCollapsibleContent">
+        <p style="font-size:0.86rem; color:#e2e8f0; margin:8px 0 10px; line-height:1.65;">
+          ✨ <strong>تعريف مختصر بفضلها وتذكير باغتنامها:</strong> الأشهر الحُرُم الأربعة عظّم الله حرمتها وضاعف فيها أجر الطاعات والعمل الصالح، وشدّد فيها النهي عن ظلم النفس والمعاصي — <strong>فاغتنمها بالطاعات واجتناب الظلم والمعاصي:</strong>
+        </p>
+
+        <!-- The 4 Sacred Months Clear Pills/Cards in Top Board -->
+        <div class="top-four-sacred-grid">
+          <div class="top-sacred-item" data-hijri-month="11">
+            <strong>1. ذو القعدة</strong>
+            <span>الشهر الحرام الأول من المتواليات؛ شهر التهيؤ للحج والعبادة ومضاعفة الحسنات.</span>
+          </div>
+          <div class="top-sacred-item" data-hijri-month="12">
+            <strong>2. ذو الحجة</strong>
+            <span>فيه العشر الأوائل (أفضل أيام الدنيا) ويوم عرفة العظيم ويوم النحر.</span>
+          </div>
+          <div class="top-sacred-item" data-hijri-month="1">
+            <strong>3. المحرّم</strong>
+            <span>«أفضل الصيام بعد رمضان شهر الله المحرّم»، وفيه صيام يوم عاشوراء المبارك.</span>
+          </div>
+          <div class="top-sacred-item" data-hijri-month="7">
+            <strong>4. رجب</strong>
+            <span>الشهر الحرام الفرد؛ شهر بذر الطاعات والاستعداد الروحي وتجنب الظلم والمعاصي.</span>
+          </div>
+        </div>
+
+        <!-- Fasting Seasons Reminders Row in Top Board -->
+        <div class="top-fasting-seasons-strip">
+          <div class="top-season-chip">
+            <strong>🕋 يوم عرفة لغير الحاج (9 ذو الحجة):</strong> صيامه يكفّر السنة التي قبله والسنة التي بعده.
+          </div>
+          <div class="top-season-chip">
+            <strong>🌟 العشر الأوائل من ذي الحجة:</strong> أفضل أيام الدنيا للعمل الصالح والذكر مع إبراز صيام <strong>يوم عرفة</strong>.
+          </div>
+          <div class="top-season-chip">
+            <strong>🌊 عاشوراء (10 المحرّم):</strong> يكفّر السنة الماضية، مع التذكير بصيام <strong>يوم قبله (9 محرم) أو يوم بعده (11 محرم)</strong>.
+          </div>
+          <div class="top-season-chip">
+            <strong>🌙 ستة أيام من شوال:</strong> «من صام رمضان ثم أتبعه ستاً من شوال كان كصيام الدهر».
+          </div>
+          <div class="top-season-chip">
+            <strong>📅 صيام الإثنين والخميس والأيام البيض (13 و14 و15):</strong> سنة نبوية مباركة من كل شهر هجري.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Main Header: Brand, Live Clock (AM/PM + Seconds) & Hijri/Gregorian Dates, 18 Languages & Multi-Level Rain/Audio Controls -->
+  <header class="top-utility-bar">
+    <div class="brand-cluster">
+      <div class="brand-logo">NF</div>
+      <div class="brand-title">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <h1>NileFitPro</h1>
+          <span class="accuracy-verified-badge" style="font-size:0.68rem; padding:2px 8px;" title="مؤمّن بالكامل ضد ثغرات XSS و CSRF">🔒 آمن 100%</span>
+        </div>
+        <p data-i18n="appTagline">منظومة التغذية الذكية (66,880+ وجبة)، التمارين الميكانيكية 100%، والزاد الإيماني</p>
+      </div>
+    </div>
+
+    <!-- Live Clock (HH:MM:SS AM/PM) + Gregorian & Hijri Date -->
+    <div class="clock-date-widget">
+      <div id="liveClockDisplay" class="live-time-display">09:30:00 AM</div>
+      <div class="date-stack">
+        <div id="hijriDateDisplay" class="date-hijri">🌙 الهجري: جاري الحساب...</div>
+        <div id="gregorianDateDisplay" class="date-gregorian">📅 الميلادي: جاري الحساب...</div>
+      </div>
+    </div>
+
+    <!-- 18-Language Selector + Sky/Dark Mode + Clouds + Multi-Level Rain Intensity & Volume + Smart Gym Notification -->
+    <div class="header-controls">
+      <select id="langSelect" class="ctrl-select" title="اختر اللغة (18 لغة متاحة)"></select>
+
+      <select id="skyModeSelect" class="ctrl-select" onchange="window.nileSkyAudio.setSkyMode(this.value)" title="وضع السماء والتوقيت">
+        <option value="auto">🕒 تلقائي حسب الساعة (شروق/نهار/غروب/ليل)</option>
+        <option value="sunrise">🌅 وضع شروق الشمس (Sunrise)</option>
+        <option value="day">☀️ وضع النهار المشمس (Daylight)</option>
+        <option value="sunset">🌇 وضع غروب الشمس (Sunset)</option>
+        <option value="night">🌙 وضع الليل والقمر والنجوم (Dark/Night)</option>
+      </select>
+
+      <button class="ctrl-btn" onclick="window.nileSkyAudio.toggleDarkLightManual()" title="تبديل الدارك مود والنهار">
+        🌓 دارك / نهار
+      </button>
+
+      <button id="cloudsToggleBtn" class="ctrl-btn active" onclick="this.classList.toggle('active', window.nileSkyAudio.toggleClouds())">
+        ☁️ غيوم واقعية
+      </button>
+
+      <!-- Multi-Level Rain Intensity + Volume Control -->
+      <div style="display:inline-flex; align-items:center; gap:5px; background:var(--bg-secondary); padding:3px 8px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+        <select id="rainIntensitySelect" class="ctrl-select" style="border:none; padding:3px 4px; background:transparent;" onchange="window.nileSkyAudio.setRainIntensity(this.value)" title="درجة غزارة المطر">
+          <option value="0">🌧️ المطر: متوقف</option>
+          <option value="1">🌦️ مطر خفيف (درجة 1)</option>
+          <option value="2">🌧️ مطر متوسط (درجة 2)</option>
+          <option value="3">⛈️ مطر غزير (درجة 3)</option>
+          <option value="4">🌩️ غزارة قصوى وعاصفة (درجة 4)</option>
+        </select>
+        <input id="headerRainVolume" type="range" min="0" max="1" step="0.05" value="0.75" style="width:58px; cursor:pointer;" title="التحكم في درجة صوت المطر" oninput="window.nileSkyAudio.setNatureVolume('rain', this.value)" />
+      </div>
+
+      <button class="ctrl-btn gold-btn" onclick="triggerSmartGymNotification(true)" title="إظهار إشعار تحفيزي عشوائي وتذكير الجيم اليومي">
+        🔔 تذكير الجيم وتحفيز
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Navigation Tabs (Clean Tabbed Architecture for Fast Access Without Scrolling) -->
+  <nav class="main-nav">
+    <button class="nav-tab active" data-sec="sec-body" onclick="switchAppSection('sec-body', this)">
+      <span>⚖️</span> <span data-i18n="navBody">حاسبة الجسم والوزن المثالي</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-meals" onclick="switchAppSection('sec-meals', this)">
+      <span>🥗</span> <span data-i18n="navMeals">أكثر من 60,000 وجبة صحية</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-workouts" onclick="switchAppSection('sec-workouts', this)">
+      <span>🏋️</span> <span data-i18n="navWorkouts">التمارين والفيديو الكرتوني 100%</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-quran" onclick="switchAppSection('sec-quran', this)">
+      <span>🕋</span> <span data-i18n="navQuran">المصحف الكامل (20 قارئاً)</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-islamic" onclick="switchAppSection('sec-islamic', this)">
+      <span>📿</span> <span data-i18n="navIslamic">الأذكار، الأشهر الحُرُم، الرقية والسلاسل</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-sleep" onclick="switchAppSection('sec-sleep', this)">
+      <span>⏰</span> <span data-i18n="navSleep">النوم الصحي، الفجر، البومودورو والطبيعة</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-cert" onclick="switchAppSection('sec-cert', this)">
+      <span>🏆</span> <span data-i18n="navCert">شهادات التقدير والـ PDF</span>
+    </button>
+    <button class="nav-tab" data-sec="sec-sinai" onclick="switchAppSection('sec-sinai', this)">
+      <span>🫒</span> <span data-i18n="navSinai">زيت زيتون مزارع سيناء</span>
+    </button>
+  </nav>
+
+  <!-- Main Application Sections -->
+  <main class="app-container">
+
+    <!-- ====================================================================
+         SECTION 1: Body Metrics, Ideal Weight, Slow-Motion Human Cartoon Video, Daily Meals & Gym Reminder
+         ==================================================================== -->
+    <section id="sec-body" class="app-section active">
+      <div class="section-quote-slot" data-slot="body_quote"></div>
+
+      <!-- Sub-Tabs inside Section 1 to prevent long scrolling -->
+      <div class="sub-tabs-bar" data-parent="sec-body">
+        <button class="sub-tab-btn active" onclick="switchSubTab('sec-body', 'body-sub-calc', this)">⚖️ حاسبة السعرات والوزن المثالي</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-body', 'body-sub-video', this)">🎬 فيديو التحول البشري الكرتوني (Slow-Motion)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-body', 'body-sub-meals', this)">🍽️ جدول الـ 5 وجبات اليومية</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-body', 'body-sub-reminder', this)">🔔 تذكير الجيم اليومي وجدول الأسبوع</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-body', 'all', this)">📑 عرض الكل</button>
+      </div>
+
+      <!-- Sub-Panel 1A: Calculator & Metrics -->
+      <div id="body-sub-calc" class="sub-tab-panel active">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">⚖️ بياناتك الشخصية وحساب الوزن المثالي والسعرات بالجرام</h2>
+            <span class="badge-pill emerald">دقة علمية 100%</span>
+          </div>
+
+          <div class="grid-4">
+            <div class="form-group">
+              <label>الاسم الكريم (يظهر في الشهادة والـ PDF)</label>
+              <input id="userNameInput" type="text" class="form-input" value="بطل NileFitPro" oninput="runBodyCalculation()" />
+            </div>
+            <div class="form-group">
+              <label>النوع</label>
+              <select id="userGender" class="form-select" onchange="runBodyCalculation()">
+                <option value="male">ذكر (Male)</option>
+                <option value="female">أنثى (Female)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>السن (بالسنوات)</label>
+              <input id="userAge" type="number" class="form-input" value="26" min="12" max="95" oninput="runBodyCalculation()" />
+            </div>
+            <div class="form-group">
+              <label>الطول (بالسنتيمتر cm)</label>
+              <input id="userHeight" type="number" class="form-input" value="176" min="120" max="230" oninput="runBodyCalculation()" />
+            </div>
+            <div class="form-group">
+              <label>الوزن الحالي (كجم kg)</label>
+              <input id="userWeight" type="number" class="form-input" value="84" min="35" max="250" oninput="runBodyCalculation()" />
+            </div>
+            <div class="form-group">
+              <label>المستوى التدريبي</label>
+              <select id="userLevel" class="form-select" onchange="runBodyCalculation()">
+                <option value="beginner">مبتدئ (Beginner)</option>
+                <option value="intermediate" selected>متوسط (Intermediate)</option>
+                <option value="advanced">متقدم / محترف (Advanced)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>معدل النشاط اليومي</label>
+              <select id="userActivity" class="form-select" onchange="runBodyCalculation()">
+                <option value="1.2">خامل / عمل مكتبي (1.2)</option>
+                <option value="1.375">نشاط خفيف 1-3 أيام تمرين (1.375)</option>
+                <option value="1.55" selected>نشاط متوسط 3-5 أيام تمرين (1.55)</option>
+                <option value="1.725">نشاط عالٍ 6 أيام تمرين (1.725)</option>
+                <option value="1.9">نشاط رياضي فائق (1.9)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>هدفك الأساسي</label>
+              <select id="userGoal" class="form-select" onchange="runBodyCalculation()">
+                <option value="cut" selected>تنشيف وحرق دهون صافي (-500 سعرة)</option>
+                <option value="recomp">إعادة تشكيل الجسم (حرق دهون + بناء عضل)</option>
+                <option value="maintain">ثبات الوزن واللياقة الصحية</option>
+                <option value="bulk">تضخيم عضلي صافي (+350 سعرة)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>مصدر الدهون الصحية المفضل في طهي وجباتك</label>
+            <select id="userPreferredFat" class="form-select" onchange="runBodyCalculation()">
+              <option value="both" selected>تنويع بين زيت زيتون مزارع سيناء البكر والسمنة البلدي الطبيعية</option>
+              <option value="sinai_olive">زيت زيتون مزارع سيناء — طبيعي بكر 100% فقط</option>
+              <option value="baladi_ghee">السمنة البلدي الطبيعية + زيت زيتون سيناء للسلطات</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn-primary" style="flex:1;" onclick="runBodyCalculation(); window.nileSkyAudio.playSFX('success');" data-i18n="calcBtn">
+              احسب سعراتك ووزنك المثالي وخطة التحول الآن
+            </button>
+            <button class="btn-gold" onclick="switchSubTab('sec-body', 'body-sub-video')" title="شاهد شكل جسمك المتوقع قبل وبعد بالسلوموشن">
+              🎬 شاهد فيديو التحول (قبل وبعد بالسلوموشن)
+            </button>
+            <button class="btn-gold" onclick="exportFullPlanInfographicOrPDF('pdf')" data-i18n="exportPdfBtn">
+              📄 حفظ الخطة PDF صفحة واحدة
+            </button>
+            <button class="ctrl-btn" onclick="exportFullPlanInfographicOrPDF('infographic')">
+              🖼️ تحميل إنفوجرافيك PNG
+            </button>
+          </div>
+        </div>
+
+        <!-- Calculated Metrics Grid -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">📊 نتائجك الدقيقة: الوزن المثالي والصحي لطولك وسنك + الماكروز بالجرامات</h2>
+          </div>
+          <div id="bodyMetricsOutput" class="grid-3"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 1B: Before & After Human Cartoon Slow-Motion Transformation Video -->
+      <div id="body-sub-video" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🎬 فيديو كرتوني لشخص بشري (قبل الالتزام وبعد الالتزام بالتغير السريع والسلوموشن Slow-Motion)</h2>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="ctrl-btn active" onclick="window.TransformationCartoonVideo.setSpeedMode('slowmo')">
+                🐢 سلوموشن بطيء (Slow-Motion)
+              </button>
+              <button class="ctrl-btn" onclick="window.TransformationCartoonVideo.setSpeedMode('normal')">
+                🎬 سرعة عادية (1x)
+              </button>
+              <button class="ctrl-btn gold-btn" onclick="window.TransformationCartoonVideo.setSpeedMode('rapid')">
+                ⚡ تغير سريع محفز (2x)
+              </button>
+              <button class="ctrl-btn" onclick="window.TransformationCartoonVideo.manualProgress = null; window.TransformationCartoonVideo.isPlaying = !window.TransformationCartoonVideo.isPlaying">
+                ⏯️ إيقاف / تشغيل
+              </button>
+            </div>
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:10px;">
+            شاهد الشكل المتوقع للشخص البشري قبل الالتزام وبعد الالتزام بالتغير السريع وبشكل <strong>سلوموشن (Slow-Motion)</strong> واضح يبرز نحت الخصر ونزول الدهون وبروز العضلات بناءً على نظام الأكل والسعرات والتمرين:
+          </p>
+          <div class="cartoon-stage-wrap">
+            <canvas id="transformCartoonCanvas" class="cartoon-canvas" width="660" height="340"></canvas>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:10px; background:rgba(0,0,0,0.28); padding:8px 12px; border-radius:10px;">
+            <span style="font-size:0.8rem; color:#fde68a; font-weight:700;">🎚️ شريط فحص التحول بالسلوموشن يدوياً:</span>
+            <input type="range" min="0" max="1" step="0.01" value="0.5" style="flex:1; cursor:pointer;"
+              oninput="window.TransformationCartoonVideo.manualProgress = parseFloat(this.value)"
+              onchange="setTimeout(() => { window.TransformationCartoonVideo.manualProgress = null; }, 5000)" />
+            <button class="ctrl-btn" style="padding:3px 8px; font-size:0.75rem;" onclick="window.TransformationCartoonVideo.manualProgress = null">🔄 تشغيل تلقائي</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 1C: Daily 5 Balanced Meals Preview -->
+      <div id="body-sub-meals" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🍽️ جدول وجباتك اليومي المقترح (تنوع اقتصادي وصحي بدون إجبار على ربع كيلو لحم يومياً)</h2>
+            <button class="btn-gold" onclick="window.dailyMealIndices = window.dailyMealIndices.map(x => x + 23); renderDailyFiveMeals(); window.nileSkyAudio.playSFX('success');">
+              🔄 توليد يوم غذائي جديد بالكامل
+            </button>
+          </div>
+          <div id="dailyFiveMealsGrid" class="grid-3"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 1D: Daily Gym Reminder & Weekly Schedule Manager -->
+      <div id="body-sub-reminder" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🔔 نظام التذكير اليومي بنزول الجيم، الجداول التدريبية، والإشعارات التحفيزية</h2>
+            <button class="btn-gold" onclick="triggerSmartGymNotification(true)">
+              🎲 عرض إشعار تحفيزي عشوائي وتذكير الجيم الآن
+            </button>
+          </div>
+          <div class="grid-2">
+            <div class="stat-box" style="text-align:right;">
+              <h4 style="color:var(--accent-gold-light); margin-bottom:8px;">⏰ ضبط منبه وتذكير نزول الجيم اليومي</h4>
+              <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:10px;">
+                حدد موعد تمرينك اليومي ليصلك إشعار تحفيزي عشوائي مع تنبيه صوتي وتذكير بجدول عضلات اليوم وأذكار الصباح والمساء:
+              </p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <input id="gymReminderTimeInput" type="time" class="form-input" value="17:00" style="flex:1;" />
+                <button class="btn-primary" onclick="saveDailyGymReminderTime()">✅ تفعيل التذكير اليومي</button>
+              </div>
+              <div id="gymReminderSavedStatus" style="margin-top:8px; font-size:0.84rem; color:var(--accent-emerald); font-weight:700;"></div>
+            </div>
+            <div class="stat-box" style="text-align:right;">
+              <h4 style="color:var(--accent-emerald); margin-bottom:8px;">📅 جدول تمرينك المقترح لهذا الأسبوع</h4>
+              <div id="quickWeeklyGymScheduleSummary" style="font-size:0.86rem; line-height:1.7;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 2: 60,000+ (66,880) Healthy Meal Alternatives & Cartoon Prep Video
+         ==================================================================== -->
+    <section id="sec-meals" class="app-section">
+      <div class="section-quote-slot" data-slot="meals_quote"></div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🥗 موسوعة أكثر من 60,000 وجبة وبديل صحي محسوب بالجرامات والسعرات (66,880 وجبة)</h2>
+            <p id="mealsTotalCounterLabel" style="font-size:0.88rem; color:var(--accent-emerald); font-weight:700;"></p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="ctrl-btn" onclick="changeMealsPage(-1)">➡️ الصفحة السابقة</button>
+            <button class="ctrl-btn active" onclick="changeMealsPage(1)">⬅️ دفعة وجبات جديدة</button>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:18px;">
+          <div class="form-group">
+            <label>🔍 ابحث بالمكون (مثال: جبنة قريش، بيض، عدس، فول، سمك، شوفان، دجاج، حلوم...)</label>
+            <input id="mealSearchInput" type="text" class="form-input" placeholder="اكتب اسم الأكلة أو المكون..." oninput="renderMealsBrowser()" />
+          </div>
+          <div class="form-group">
+            <label>📂 تصنيف الوجبة</label>
+            <select id="mealCategoryFilter" class="form-select" onchange="renderMealsBrowser()">
+              <option value="all">جميع الوجبات (66,880 بديل صحي متكامل)</option>
+              <option value="breakfast">وجبات الإفطار المتنوعة</option>
+              <option value="lunch">وجبات الغداء المتوازنة</option>
+              <option value="dinner">وجبات العشاء الخفيفة</option>
+              <option value="snack">السناكس والبدائل الاقتصادية</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>🔢 انتقل مباشرة إلى رقم وجبة (من 1 إلى 66,880)</label>
+            <input id="mealJumpNumber" type="number" class="form-input" min="1" max="66880" placeholder="اكتب رقم الوجبة مثلاً 60500..." oninput="renderMealsBrowser()" />
+          </div>
+        </div>
+
+        <div id="tenThousandMealsGrid" class="grid-3"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 3: Complete Workouts & 100% Biomechanically Accurate Cartoon Video + Adhkar During Workout
+         ==================================================================== -->
+    <section id="sec-workouts" class="app-section">
+      <div class="section-quote-slot" data-slot="workouts_quote"></div>
+
+      <!-- Sub-Tabs inside Workouts Section -->
+      <div class="sub-tabs-bar" data-parent="sec-workouts">
+        <button class="sub-tab-btn active" onclick="switchSubTab('sec-workouts', 'work-sub-player', this)">🎬 الفيديو الكرتوني 100% ومكتبة جميع العضلات</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-workouts', 'work-sub-splits', this)">📋 جداول التمارين (PPL / Bro Split / Arnold / Home / Cardio)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-workouts', 'work-sub-adhkar', this)">🛡️ أذكار الصباح والمساء أثناء التمرين (بالصور واليوتيوب)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-workouts', 'all', this)">📑 عرض الكل</button>
+      </div>
+
+      <!-- Sub-Panel 3A: 100% Biomechanical Cartoon Player + All Muscle Groups Library -->
+      <div id="work-sub-player" class="sub-tab-panel active">
+        <div id="biomechPlayerCard" class="glass-card">
+          <div class="card-header">
+            <div>
+              <span class="accuracy-verified-badge">✅ تأكيد الجودة: أداء حركي وميكانيكي صحيح 100% على الجهاز المستخدم بدون أي أخطاء</span>
+              <h2 id="activeExTitle" class="card-title" style="margin-top:6px;">ضغط البنش المستوي بالبار</h2>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="ctrl-btn" onclick="window.BiomechanicalCartoonEngine.isPlaying = !window.BiomechanicalCartoonEngine.isPlaying">
+                ⏯️ إيقاف / تشغيل الفيديو
+              </button>
+              <button class="ctrl-btn" onclick="window.BiomechanicalCartoonEngine.speedMult = window.BiomechanicalCartoonEngine.speedMult === 1 ? 0.45 : 1">
+                🐢 عرض بطيء للتكنيك (Slow-Mo)
+              </button>
+              <a id="activeExYoutubeBtn" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" class="btn-gold" style="text-decoration:none; padding:8px 16px;">
+                📺 بحث مباشر عن التمرين في يوتيوب
+              </a>
+            </div>
+          </div>
+
+          <div class="grid-2" style="align-items:center;">
+            <div class="cartoon-stage-wrap">
+              <canvas id="biomechCanvas" class="cartoon-canvas" width="660" height="360"></canvas>
+            </div>
+            <div>
+              <div id="activeExMachine" style="font-weight:800; color:var(--accent-gold-light); font-size:1.02rem; margin-bottom:6px;"></div>
+              <div id="activeExTempo" style="font-size:0.9rem; color:var(--accent-cyan); margin-bottom:10px;"></div>
+              <div id="activeExSets" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;"></div>
+              <h4 style="color:var(--accent-emerald); margin-bottom:6px;">📐 خطوات الأداء الصحيح 100% لتجنب أي إصابات:</h4>
+              <div id="activeExSteps" style="background:rgba(0,0,0,0.25); padding:12px; border-radius:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- All Muscle Groups Filter & Exercises Library -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">💪 جميع التمارين لكل عضلة في الجسم مع الفيديو الكرتوني ولينك اليوتيوب</h2>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px;">
+            <button class="ctrl-btn muscle-filter-btn active" data-muscle="all" onclick="renderExercisesGrid('all')">🌟 كل العضلات</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="chest" onclick="renderExercisesGrid('chest')">الصدر (Chest)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="back" onclick="renderExercisesGrid('back')">الظهر (Back)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="shoulders" onclick="renderExercisesGrid('shoulders')">الأكتاف (Shoulders)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="biceps" onclick="renderExercisesGrid('biceps')">البايسبس (Biceps)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="triceps" onclick="renderExercisesGrid('triceps')">الترايسبس (Triceps)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="forearms" onclick="renderExercisesGrid('forearms')">السواعد (Forearms)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="quads" onclick="renderExercisesGrid('quads')">الأرجل الأمامية والأرداف (Quads)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="hamstrings" onclick="renderExercisesGrid('hamstrings')">الخلفيات (Hamstrings)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="calves" onclick="renderExercisesGrid('calves')">السمانة (Calves)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="abs" onclick="renderExercisesGrid('abs')">البطن والجذع (Abs & Core)</button>
+            <button class="ctrl-btn muscle-filter-btn" data-muscle="cardio" onclick="renderExercisesGrid('cardio')">الكارديو (HIIT & LISS)</button>
+          </div>
+
+          <div id="exercisesLibraryGrid" class="grid-3"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 3B: Workout Split Selector -->
+      <div id="work-sub-splits" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🏋️ اختر نظام التمارين المناسب لمستواك وهدفك</h2>
+            <select id="workoutSplitSelect" class="ctrl-select" style="font-size:1rem; padding:10px 16px;" onchange="renderWorkoutSplitDetails(this.value)">
+              <option value="ppl">نظام بوش بول ليج (Push Pull Legs - PPL)</option>
+              <option value="bro_split">نظام برو سبليت (Bro Split - عضلة كل يوم)</option>
+              <option value="arnold_split">نظام أرنولد سبليت (Arnold Split - صدر وظهر معاً)</option>
+              <option value="home_resistance">تمارين مقاومة في المنزل (Home Resistance)</option>
+              <option value="hiit_cardio">كارديو عالي الشدة المتقطع (HIIT Cardio)</option>
+              <option value="liss_cardio">كارديو منخفض الشدة المستمر (LISS Cardio)</option>
+            </select>
+          </div>
+          <div id="workoutSplitScheduleBox"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 3C: Morning & Evening Adhkar Companion DURING WORKOUT (Uploaded Images Reading Only + YouTube Link + PDF/PNG) -->
+      <div id="work-sub-adhkar" class="sub-tab-panel">
+        <div class="glass-card" style="border-color:rgba(245, 158, 11, 0.55);">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">🛡️ أذكار الصباح والمساء كاملة قراءة فقط من الصور المرفوعة + لينك سماعها على اليوتيوب أثناء التمرين</h3>
+              <p style="font-size:0.9rem; color:#fde68a; margin-top:4px; line-height:1.7;">
+                ⚠️ <strong>تأكيد هام جداً على أهمية أذكار الصباح والمساء:</strong> المحافظة على قراءة أذكار الصباح والمساء وسماعها أثناء التمرين هي حصنك المنيع (بإذن الله) من العين والحسد والإصابات والكسل، وتمنحك طمأنينة القلب وبركة في قوتك وصحتك طوال اليوم!
+              </p>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%AD+%D9%88%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D8%A1+%D9%83%D8%A7%D9%85%D9%84%D8%A9+%D9%85%D8%B4%D8%A7%D8%B1%D9%8A+%D8%A7%D9%84%D8%B9%D9%81%D8%A7%D8%B3%D9%8A" target="_blank" rel="noopener noreferrer" class="btn-gold" style="text-decoration:none; padding:6px 14px; font-size:0.85rem;">
+                📺 لينك سماع أذكار الصباح والمساء على اليوتيوب أثناء التمرين
+              </a>
+              <button class="ctrl-btn active" onclick="renderWorkoutAdhkarWidget('morning')">🌅 قراءة أذكار الصباح (32 ذكراً)</button>
+              <button class="ctrl-btn" onclick="renderWorkoutAdhkarWidget('evening')">🌆 قراءة أذكار المساء (27 ذكراً)</button>
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('adhkar', 'pdf')">📄 تحميل PDF</button>
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('adhkar', 'png')">🖼️ تحميل PNG</button>
+            </div>
+          </div>
+
+          <!-- Uploaded Morning & Evening Adhkar Full Images in Workout Section (Reading Only + PDF/PNG Download) -->
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div class="adhkar-uploaded-img-card">
+              <h4 style="color:#fde68a; margin-bottom:8px;">🌅 قراءة أذكار الصباح كاملة من الصورة المرفوعة (اضغط للتكبير الكامل)</h4>
+              <img src="assets/images/adhkar_morning.jpg" alt="أذكار الصباح حصن المسلم" onclick="openImageLightbox('assets/images/adhkar_morning.jpg', 'أذكار الصباح — حصن المسلم في بداية يومه')" />
+              <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('morning', 'png')">📥 تحميل الصورة PNG</button>
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('morning', 'pdf')">📄 تحميل الصورة PDF</button>
+                <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%AD+%D9%83%D8%A7%D9%85%D9%84%D8%A9" target="_blank" rel="noopener noreferrer" class="ctrl-btn" style="text-decoration:none; color:#f87171;">📺 سماع على اليوتيوب أثناء التمرين</a>
+              </div>
+            </div>
+            <div class="adhkar-uploaded-img-card">
+              <h4 style="color:#fde68a; margin-bottom:8px;">🌆 قراءة أذكار المساء كاملة من الصورة المرفوعة (اضغط للتكبير الكامل)</h4>
+              <img src="assets/images/adhkar_evening.jpg" alt="أذكار المساء حصن المسلم" onclick="openImageLightbox('assets/images/adhkar_evening.jpg', 'أذكار المساء — بعد أداء صلاة العصر فهي حصنك المنيع')" />
+              <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('evening', 'png')">📥 تحميل الصورة PNG</button>
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('evening', 'pdf')">📄 تحميل الصورة PDF</button>
+                <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D8%A1+%D9%83%D8%A7%D9%85%D9%84%D8%A9" target="_blank" rel="noopener noreferrer" class="ctrl-btn" style="text-decoration:none; color:#f87171;">📺 سماع على اليوتيوب أثناء التمرين</a>
+              </div>
+            </div>
+          </div>
+
+          <div id="workoutAdhkarQuickList" class="grid-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 4: Full Holy Quran Audio Mushaf (20 Reciters + MP3 Download)
+         ==================================================================== -->
+    <section id="sec-quran" class="app-section">
+      <div class="section-quote-slot" data-slot="quran_quote"></div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🕋 المصحف الشريف كاملاً (114 سورة) بصوت 20 قارئاً من نخبة القراء مع تحميل كل سورة MP3</h2>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.7;">
+              إسلام صبحي • مشاري راشد • محمد اللحيدان • سعود الشريم • محمد أيوب • مصطفى إسماعيل • محمد رفعت • سلمان العتيبي • منصور السالمي • أحمد العجمي • ياسر الدوسري • علي جابر • محمود علي البنا • وديع اليمني • عبد الباسط عبد الصمد • ماهر المعيقلي • يوسف الصقير • إدريس أبكر • محمد صديق المنشاوي • محمود خليل الحصري
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:18px; align-items:end;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>🎙️ اختر القارئ المفضل (20 قارئاً معتمداً للمصحف الكامل)</label>
+            <select id="quranReciterSelect" class="form-select"></select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>🔍 ابحث عن اسم السورة أو رقمها (من 1 إلى 114)</label>
+            <input id="surahSearchInput" type="text" class="form-input" placeholder="مثال: البقرة، الكهف، يس، الملك..." oninput="renderSurahsGrid()" />
+          </div>
+        </div>
+
+        <!-- Sticky Quran Audio Deck -->
+        <div class="stat-box gold" style="margin-bottom:18px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+          <div id="quranNowPlayingLabel" style="font-weight:800; font-size:1.08rem;">🕋 اختر سورة للاستماع</div>
+          <audio id="quranMainAudio" controls style="flex:1; min-width:260px; max-width:520px;"></audio>
+          <a id="quranCurrentDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" download class="btn-gold" style="text-decoration:none; padding:8px 16px;">
+            📥 تحميل السورة الحالية MP3
+          </a>
+        </div>
+
+        <div id="quranSurahsGrid" class="surah-grid"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 5: Islamic Hub (Organized into Fast Sub-Tabs: Adhkar, Sacred Months & Fasting, Tasbeeh, Ruqyah, Friday & Duas, Seerah, Strong Personality)
+         ==================================================================== -->
+    <section id="sec-islamic" class="app-section">
+      <div class="section-quote-slot" data-slot="islamic_quote"></div>
+
+      <!-- Sub-Tabs Bar inside Islamic Hub so every topic is 1 click away with zero scrolling fatigue -->
+      <div class="sub-tabs-bar" data-parent="sec-islamic">
+        <button class="sub-tab-btn active" onclick="switchSubTab('sec-islamic', 'isl-sub-adhkar', this)">🛡️ أذكار الصباح والمساء (بالصور واليوتيوب)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-fasting', this)">🌙 الأشهر الحُرُم الأربعة وعرفة وعاشوراء وشوال</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-tasbeeh', this)">📿 عدادات التسبيح الـ 4 والتوفيق</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-ruqyah', this)">🌿 الرقية الشرعية الكاملة (PDF/PNG)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-friday', this)">🕌 سنن يوم الجمعة وأدعية الأنبياء</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-seerah', this)">📺 السيرة النبوية (نبيل العوضي)</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'isl-sub-strong', this)">🦁 سلسلة الشخصية القوية</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-islamic', 'all', this)">📑 عرض الكل</button>
+      </div>
+
+      <!-- Sub-Panel 5A: Morning & Evening Adhkar (Reading Only From Uploaded Images + YouTube Link During Workout + PDF/PNG) -->
+      <div id="isl-sub-adhkar" class="sub-tab-panel active">
+        <div class="glass-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">🛡️ أذكار الصباح والمساء كاملة (قراءة فقط من الصور المرفوعة + لينك سماعها على اليوتيوب أثناء التمرين + PDF/PNG)</h2>
+              <p style="font-size:0.9rem; color:#fde68a; margin-top:4px; line-height:1.7;">
+                ⚠️ <strong>تأكيد هام جداً على أهمية أذكار الصباح والمساء:</strong> المحافظة اليومية على قراءة أذكار الصباح والمساء هي حصن المسلم المنيع، تحفظك بحفظ الله من كل سوء وعين وحسد وإصابة أثناء التمرين وطوال يومك، وتملأ قلبك بالسكينة والطمأنينة والبركة!
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="ctrl-btn active" onclick="renderAdhkarSection('morning')">🌅 قراءة أذكار الصباح (32 ذكراً)</button>
+              <button class="ctrl-btn" onclick="renderAdhkarSection('evening')">🌆 قراءة أذكار المساء (27 ذكراً)</button>
+              <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%AD+%D9%88%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D8%A1+%D9%85%D8%B4%D8%A7%D8%B1%D9%8A+%D8%A7%D9%84%D8%B9%D9%81%D8%A7%D8%B3%D9%8A" target="_blank" rel="noopener noreferrer" class="btn-gold" style="text-decoration:none; padding:7px 14px; font-size:0.84rem;">
+                📺 لينك سماعها على اليوتيوب أثناء التمرين
+              </a>
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('adhkar', 'pdf')">📄 تحميل PDF</button>
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('adhkar', 'png')">🖼️ تحميل PNG</button>
+            </div>
+          </div>
+
+          <!-- Full-Size Uploaded Morning & Evening Adhkar Infographic Images (Reading Only + PDF/PNG Download) -->
+          <div class="grid-2" style="margin-bottom:18px;">
+            <div class="adhkar-uploaded-img-card">
+              <h3 style="color:#fde68a; margin-bottom:8px; font-size:1.05rem;">🌅 لوحة أذكار الصباح المرفوعة كاملة للقراءة (حصن المسلم في بداية يومه)</h3>
+              <img src="assets/images/adhkar_morning.jpg" alt="أذكار الصباح كاملة" onclick="openImageLightbox('assets/images/adhkar_morning.jpg', 'أذكار الصباح — حصن المسلم في بداية يومه')" />
+              <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('morning', 'png')">🖼️ تحميل لوحة الصباح PNG</button>
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('morning', 'pdf')">📄 تحميل لوحة الصباح PDF</button>
+                <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%AD+%D9%83%D8%A7%D9%85%D9%84%D8%A9" target="_blank" rel="noopener noreferrer" class="ctrl-btn" style="text-decoration:none; color:#f87171;">📺 سماع على اليوتيوب أثناء التمرين</a>
+              </div>
+            </div>
+
+            <div class="adhkar-uploaded-img-card">
+              <h3 style="color:#fde68a; margin-bottom:8px; font-size:1.05rem;">🌆 لوحة أذكار المساء المرفوعة كاملة للقراءة (بعد أداء صلاة العصر فهي حصنك المنيع)</h3>
+              <img src="assets/images/adhkar_evening.jpg" alt="أذكار المساء كاملة" onclick="openImageLightbox('assets/images/adhkar_evening.jpg', 'أذكار المساء — بعد أداء صلاة العصر فهي حصنك المنيع')" />
+              <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('evening', 'png')">🖼️ تحميل لوحة المساء PNG</button>
+                <button class="ctrl-btn gold-btn" onclick="downloadUploadedAdhkarImage('evening', 'pdf')">📄 تحميل لوحة المساء PDF</button>
+                <a href="https://www.youtube.com/results?search_query=%D8%A7%D8%B0%D9%83%D8%A7%D8%B1+%D8%A7%D9%84%D9%85%D8%B3%D8%A7%D8%A1+%D9%83%D8%A7%D9%85%D9%84%D8%A9" target="_blank" rel="noopener noreferrer" class="ctrl-btn" style="text-decoration:none; color:#f87171;">📺 سماع على اليوتيوب أثناء التمرين</a>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="color:var(--accent-emerald); margin-bottom:12px;">📖 القراءة النصية الكاملة لجميع الأذكار المستخرجة من الصور المرفوعة (مع عداد التكرار):</h3>
+          <div id="adhkarItemsList"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5B: Sacred Months & Special Fasting Seasons (Arafah, Ashura, First 10 of Dhul-Hijjah, 6 of Shawwal) -->
+      <div id="isl-sub-fasting" class="sub-tab-panel">
+        <div class="sacred-months-board">
+          <div style="text-align:center; max-width:920px; margin:0 auto 20px;">
+            <span class="badge-pill active-fast" style="font-size:0.9rem; margin-bottom:8px;">🕋 لوحة الأشهر الحُرُم الأربعة ومواسم الصيام المباركة</span>
+            <h2 style="font-size:1.65rem; font-weight:900; color:#fde68a; margin-bottom:10px;">
+              التذكير بالأشهر الحُرُم الأربعة ومواسم الطاعات والصيام
+            </h2>
+            <div style="background:rgba(0,0,0,0.42); border:1.5px solid #fbbf24; border-radius:14px; padding:14px 18px; margin-bottom:12px; font-size:1.12rem; font-weight:800; color:#fef08a; line-height:1.8;">
+              قال الله تعالى في سورة التوبة، الآية 36:<br>
+              ﴿ إِنَّ عِدَّةَ الشُّهُورِ عِندَ اللَّهِ اثْنَا عَشَرَ شَهْرًا فِي كِتَابِ اللَّهِ يَوْمَ خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ مِنْهَا أَرْبَعَةٌ حُرُمٌ ۚ ذَٰلِكَ الدِّينُ الْقَيِّمُ ۚ فَلَا تَظْلِمُوا فِيهِنَّ أَنفُسَكُمْ ﴾
+            </div>
+            <p id="sacredMonthsVirtueParagraph" style="font-size:0.95rem; color:#e2e8f0; line-height:1.75;"></p>
+          </div>
+
+          <!-- The 4 Sacred Months Clear Grid: Dhul-Qa'dah, Dhul-Hijjah, Muharram, Rajab -->
+          <div id="sacredMonthsFourGrid" class="grid-4" style="margin-bottom:24px;"></div>
+
+          <!-- Special Fasting Seasons: Arafah, First 10 of Dhul-Hijjah, Ashura + Day Before/After, 6 Days of Shawwal -->
+          <h3 style="color:#fde68a; font-size:1.25rem; margin-bottom:14px; text-align:center;">
+            🌟 مواسم الصيام الفاضلة (يوم عرفة • العشر الأوائل من ذي الحجة • عاشوراء ويوماً قبله أو بعده • ستة من شوال)
+          </h3>
+          <div id="specialFastingSeasonsGrid" class="grid-2"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5C: 4 Interactive Tasbeeh Counters with Importance in Success -->
+      <div id="isl-sub-tasbeeh" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">📿 عدادات التسبيح والأذكار التفاعلية الـ 4 وأهميتها في التوفيق والبركة</h2>
+          </div>
+          <div id="tasbeehCountersGrid" class="grid-4"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5D: Ruqyah Ash-Shar'iyyah (Online Reading + PDF/PNG) -->
+      <div id="isl-sub-ruqyah" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🌿 الرقية الشرعية الكاملة للقراءة أونلاين مع إمكانية تحميلها (PDF / PNG)</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('ruqyah', 'pdf')">📄 تحميل الرقية PDF</button>
+              <button class="ctrl-btn gold-btn" onclick="exportIslamicContent('ruqyah', 'png')">🖼️ تحميل الرقية PNG</button>
+            </div>
+          </div>
+          <div id="ruqyahItemsContainer"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5E: Friday Sunnahs & Prophets' Duas (Reading Only) -->
+      <div id="isl-sub-friday" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🕌 سنن يوم الجمعة المباركة</h2>
+          </div>
+          <div id="fridaySunnahsGrid" class="grid-3"></div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🤲 أدعية الأنبياء والرسل من القرآن الكريم (قراءة فقط وتدبر)</h2>
+          </div>
+          <div id="prophetsDuasGrid" class="grid-2"></div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5F: Series 1 - Prophetic Biography Series by Sheikh Nabil Al-Awadi (30 Episodes Ordered) -->
+      <div id="isl-sub-seerah" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🕌 سلسلة السيرة النبوية العطرة — للشيخ نبيل العوضي (30 حلقة مرتبة للمشاهدة المباشرة)</h2>
+            <a href="https://youtube.com/playlist?list=PLbDRORmj0gydAp_9O0Vc4fq4qE3zmrTdw&si=nDAac-e7WgSxLLlL" target="_blank" rel="noopener noreferrer" class="btn-gold" style="text-decoration:none; padding:8px 14px;">
+              📺 فتح السلسلة الكاملة على يوتيوب
+            </a>
+          </div>
+          <div class="grid-2">
+            <div style="border-radius:14px; overflow:hidden; border:2px solid var(--accent-gold); background:#000; min-height:340px;">
+              <iframe id="seerahYoutubeIframe" width="100%" height="360" src="https://www.youtube.com/embed/f5QeWsfYyQo?list=PLbDRORmj0gydAp_9O0Vc4fq4qE3zmrTdw" title="السيرة النبوية للشيخ نبيل العوضي" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="seerahEpisodesList" class="surah-grid" style="max-height:360px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 5G: Series 2 - Strong Personality Series (سلسلة الشخصية القوية - 6 Parts Ordered) -->
+      <div id="isl-sub-strong" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🦁 سلسلة الشخصية القوية — د. ياسر الحزيمي (مرتبة للمشاهدة المباشرة على الموقع)</h2>
+            <a href="https://youtube.com/playlist?list=PLsRtYZTCYnEdUMt_aelwwZ79D4aFcg86_&si=04mHsycfBOB-UzKz" target="_blank" rel="noopener noreferrer" class="btn-gold" style="text-decoration:none; padding:8px 14px;">
+              📺 فتح سلسلة الشخصية القوية على يوتيوب
+            </a>
+          </div>
+          <div class="grid-2">
+            <div style="border-radius:14px; overflow:hidden; border:2px solid var(--accent-emerald); background:#000; min-height:340px;">
+              <iframe id="strongPersonalityYoutubeIframe" width="100%" height="360" src="https://www.youtube.com/embed/kgzzAM0ueUE?list=PLsRtYZTCYnEdUMt_aelwwZ79D4aFcg86_" title="سلسلة الشخصية القوية" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div id="strongPersonalityEpisodesList" class="surah-grid" style="max-height:360px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 6: Healthy Sleep & Fajr Calculator + Pomodoro Calculator & Nature Sounds Mixer
+         ==================================================================== -->
+    <section id="sec-sleep" class="app-section">
+      <div class="section-quote-slot" data-slot="sleep_quote"></div>
+
+      <!-- Sub-Tabs inside Sleep/Pomodoro/Nature Section -->
+      <div class="sub-tabs-bar" data-parent="sec-sleep">
+        <button class="sub-tab-btn active" onclick="switchSubTab('sec-sleep', 'sleep-sub-calc', this)">🛌 حاسبة النوم الصحي والفجر</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-sleep', 'sleep-sub-pomo', this)">🍅 حاسبة ومؤقت البومودورو للمذاكرة العميقة</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-sleep', 'sleep-sub-nature', this)">🌧️ أصوات الطبيعة وغزارة المطر والتحكم بالصوت</button>
+        <button class="sub-tab-btn" onclick="switchSubTab('sec-sleep', 'all', this)">📑 عرض الكل</button>
+      </div>
+
+      <!-- Sub-Panel 6A: Healthy Sleep & Fajr Awakening Calculator -->
+      <div id="sleep-sub-calc" class="sub-tab-panel active">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🛌 حاسبة دورات النوم الصحي والاستيقاظ المبكر لصلاة الفجر</h2>
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:14px;">
+            يتكون النوم الصحي من دورات مدة كل منها 90 دقيقة. الاستيقاظ في نهاية الدورة يمنحك نشاطاً فائقاً لصلاة الفجر والإنتاجية:
+          </p>
+
+          <div class="form-group">
+            <label>⏰ حدد وقت استيقاظك لصلاة الفجر (أو وقت نومك)</label>
+            <input id="sleepTimeInput" type="time" class="form-input" value="04:30" />
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+            <button class="btn-primary" style="flex:1;" onclick="calculateHealthySleep('wake')">
+              🌅 أريد الاستيقاظ في هذا الوقت (احسب متى أنام)
+            </button>
+            <button class="btn-gold" style="flex:1;" onclick="calculateHealthySleep('sleep')">
+              🌙 سأنام في هذا الوقت (احسب متى أستيقظ)
+            </button>
+          </div>
+
+          <div id="sleepCyclesOutput" class="grid-3"></div>
+
+          <div class="stat-box" style="margin-top:16px; text-align:right; border-color:var(--accent-emerald);">
+            <h4 style="color:var(--accent-gold-light); margin-bottom:6px;">🌟 أهمية الاستيقاظ المبكر لصلاة الفجر في الإنتاجية والتوفيق:</h4>
+            <p style="font-size:0.88rem; line-height:1.7;">
+              • قال النبي ﷺ: <strong>«اللَّهُمَّ بَارِكْ لِأُمَّتِي فِي بُكُورِهَا»</strong> و <strong>«مَنْ صَلَّى الصُّبْحَ فَهُوَ فِي ذِمَّةِ اللَّهِ»</strong>.<br>
+              • علمياً وطبياً: ساعات الفجر الأولى تشهد أعلى تركيز لهرمونات النشاط الذهني، مع صفاء الذهن وهدوء الكون مما يضاعف استيعابك الدراسي وبناءك العضلي وتوفيق الله لك في يومك.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 6B: Pomodoro Deep Study Calculator & Interactive Timer -->
+      <div id="sleep-sub-pomo" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🍅 حاسبة ومؤقت تقنية البومودورو (Pomodoro) للمذاكرة العميقة</h2>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>📚 عدد ساعات المذاكرة المطلوبة اليوم</label>
+              <input id="pomoStudyHoursInput" type="number" class="form-input" value="3" min="0.5" max="16" step="0.5" oninput="calculatePomodoroStudyPlan()" />
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>⏱️ نظام جلسة التركيز</label>
+              <select id="pomoSessionLenSelect" class="form-select" onchange="calculatePomodoroStudyPlan()">
+                <option value="25">25 دقيقة تركيز + 5 دقائق راحة</option>
+                <option value="50">50 دقيقة تركيز عميق + 10 دقائق راحة</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="pomoCalculatorOutput" class="grid-3" style="margin-bottom:14px;"></div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:14px;">
+            <button class="ctrl-btn active" onclick="setPomodoroPreset(25, 'جلسة بومودورو قياسية (25 دقيقة تركيز)')">🍅 25 د تركيز</button>
+            <button class="ctrl-btn" onclick="setPomodoroPreset(50, 'جلسة مذاكرة عميقة (50 دقيقة تركيز)')">📚 50 د تركيز عميق</button>
+            <button class="ctrl-btn" onclick="setPomodoroPreset(5, 'استراحة قصيرة وتجديد نشاط (5 دقائق)')">☕ 5 د راحة</button>
+            <button class="ctrl-btn" onclick="setPomodoroPreset(15, 'استراحة طويلة وصلاة وأذكار (15 دقيقة)')">🕌 15 د راحة وصلاة</button>
+          </div>
+
+          <div class="stat-box gold" style="padding:20px;">
+            <div id="pomoModeLabel" class="stat-label" style="font-size:0.98rem;">جلسة بومودورو قياسية (25 دقيقة تركيز)</div>
+            <div id="pomoTimeDisplay" style="font-size:3.5rem; font-weight:900; font-family:monospace; color:#fbbf24; margin:6px 0;">25:00</div>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+              <button id="pomoStartPauseBtn" class="btn-primary" onclick="togglePomodoroTimer()">▶️ ابدأ جلسة التركيز العميق</button>
+              <button class="ctrl-btn" onclick="resetPomodoroTimer()">🔄 إعادة ضبط</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Panel 6C: Multi-Track Nature Sounds Mixer with Multi-Level Rain & Volume Sliders -->
+      <div id="sleep-sub-nature" class="sub-tab-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">🌧️ استوديو أصوات الطبيعة المتنوعة، غزارة المطر بأكثر من درجة، والتحكم في درجة الصوت</h2>
+          </div>
+          <div class="grid-3">
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">🌧️</div>
+              <h4>غزارة المطر الواقعي (بأكثر من درجة)</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">اختر درجة غزارة المطر ومستوى الصوت:</p>
+              <select id="studioRainIntensitySelect" class="form-select" style="margin-bottom:8px; padding:6px;" onchange="window.nileSkyAudio.setRainIntensity(this.value)">
+                <option value="0">متوقف (Off)</option>
+                <option value="1">درجة 1: مطر خفيف هادئ</option>
+                <option value="2">درجة 2: مطر متوسط</option>
+                <option value="3">درجة 3: مطر غزير</option>
+                <option value="4">درجة 4: غزارة قصوى وعاصفة</option>
+              </select>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input id="studioRainVolume" type="range" min="0" max="1" step="0.05" value="0.75" oninput="window.nileSkyAudio.setNatureVolume('rain', this.value)" />
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">⛈️</div>
+              <h4>رعد هادئ في الأفق</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">أصوات رعد عميقة مريحة للأعصاب</p>
+              <button class="ctrl-btn" style="margin-bottom:8px;" onclick="const on = !window.nileSkyAudio.natureChannels.thunder.active; window.nileSkyAudio.setNatureSound('thunder', on); this.classList.toggle('active', on);">
+                🔊 تشغيل / إيقاف الرعد
+              </button>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input type="range" min="0" max="1" step="0.05" value="0.5" oninput="window.nileSkyAudio.setNatureVolume('thunder', this.value)" />
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">🌊</div>
+              <h4>أمواج النيل والبحر الهادئة</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">حركة أمواج متناغمة للتأمل والتركيز</p>
+              <button class="ctrl-btn" style="margin-bottom:8px;" onclick="const on = !window.nileSkyAudio.natureChannels.waves.active; window.nileSkyAudio.setNatureSound('waves', on); this.classList.toggle('active', on);">
+                🔊 تشغيل / إيقاف الأمواج
+              </button>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input type="range" min="0" max="1" step="0.05" value="0.5" oninput="window.nileSkyAudio.setNatureVolume('waves', this.value)" />
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">🐦</div>
+              <h4>عصافير الفجر والغابة</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">تغريد عصافير الصباح الباكر</p>
+              <button class="ctrl-btn" style="margin-bottom:8px;" onclick="const on = !window.nileSkyAudio.natureChannels.birds.active; window.nileSkyAudio.setNatureSound('birds', on); this.classList.toggle('active', on);">
+                🔊 تشغيل / إيقاف العصافير
+              </button>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input type="range" min="0" max="1" step="0.05" value="0.5" oninput="window.nileSkyAudio.setNatureVolume('birds', this.value)" />
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">🌌</div>
+              <h4>هدوء الليل والنجوم</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">أجواء ليلية هادئة للنوم العميق</p>
+              <button class="ctrl-btn" style="margin-bottom:8px;" onclick="const on = !window.nileSkyAudio.natureChannels.night.active; window.nileSkyAudio.setNatureSound('night', on); this.classList.toggle('active', on);">
+                🔊 تشغيل / إيقاف الليل
+              </button>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input type="range" min="0" max="1" step="0.05" value="0.45" oninput="window.nileSkyAudio.setNatureVolume('night', this.value)" />
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <div style="font-size:1.8rem;">🍃</div>
+              <h4>نسيم الهواء بين أشجار الزيتون</h4>
+              <p class="stat-sub" style="margin-bottom:8px;">حفيف أوراق الشجر والنسيم العليل</p>
+              <button class="ctrl-btn" style="margin-bottom:8px;" onclick="const on = !window.nileSkyAudio.natureChannels.wind.active; window.nileSkyAudio.setNatureSound('wind', on); this.classList.toggle('active', on);">
+                🔊 تشغيل / إيقاف النسيم
+              </button>
+              <div style="display:flex; align-items:center; gap:6px; justify-content:center;">
+                <span style="font-size:0.78rem;">🔊 الصوت:</span>
+                <input type="range" min="0" max="1" step="0.05" value="0.45" oninput="window.nileSkyAudio.setNatureVolume('wind', this.value)" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 7: Commitment Certificate Generator & One-Page PDF Export
+         ==================================================================== -->
+    <section id="sec-cert" class="app-section">
+      <div class="section-quote-slot" data-slot="cert_quote"></div>
+
+      <div class="glass-card">
+        <div class="card-header">
+          <h2 class="card-title">🏆 إصدار شهادة التقدير والالتزام الاحترافية (بدون أي أخطاء + تحميل PNG)</h2>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:18px;">
+          <div class="form-group">
+            <label>👤 اسم البطل الملتزم على الشهادة</label>
+            <input id="certUserName" type="text" class="form-input" value="بطل NileFitPro الملتزم" oninput="window.CertificateGenerator.renderCertificate()" />
+          </div>
+          <div class="form-group">
+            <label>⏳ مدة الالتزام (أسبوع / شهور / أو حساب تلقائي بالأيام)</label>
+            <select id="certDurationSelect" class="form-select" onchange="window.CertificateGenerator.renderCertificate()">
+              <option value="1_week">إتمام أسبوع كامل في التمرين والنظام الغذائي (7 أيام)</option>
+              <option value="1_month">إتمام شهر كامل من الالتزام (30 يوماً)</option>
+              <option value="3_months">إتمام 3 شهور من الالتزام والتحول</option>
+              <option value="6_months">إتمام 6 شهور من الالتزام البطولي</option>
+              <option value="9_months">إتمام 9 شهور من القوة والانضباط</option>
+              <option value="12_months">إتمام 12 شهراً (عام كامل من الالتزام)</option>
+              <option value="auto_dates">عدّ تلقائي لعدد الأيام بناءً على تاريخ البدء والنهاية</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>📅 تاريخ البدء وتاريخ النهاية (للعد التلقائي للأيام)</label>
+            <div style="display:flex; gap:6px;">
+              <input id="certStartDate" type="date" class="form-input" style="flex:1;" onchange="document.getElementById('certDurationSelect').value='auto_dates'; window.CertificateGenerator.renderCertificate();" />
+              <input id="certEndDate" type="date" class="form-input" style="flex:1;" onchange="document.getElementById('certDurationSelect').value='auto_dates'; window.CertificateGenerator.renderCertificate();" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:20px;">
+          <button class="btn-gold" onclick="window.CertificateGenerator.downloadPNG()">
+            📥 تحميل شهادة التقدير كصورة عالية الجودة (PNG)
+          </button>
+          <button class="btn-primary" onclick="exportFullPlanInfographicOrPDF('pdf')">
+            📄 حفظ جميع بياناتك ونظامك في صفحة واحدة (PDF)
+          </button>
+          <button class="ctrl-btn" onclick="exportFullPlanInfographicOrPDF('infographic')">
+            🖼️ حفظ الخطة كصورة إنفوجرافيك محفزة (PNG)
+          </button>
+        </div>
+
+        <div style="text-align:center; overflow-x:auto;">
+          <canvas id="certificateCanvas" width="1050" height="620" style="max-width:100%; height:auto; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,0.7);"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION 8: Sinai Farms Olive Oil Showcase (Also visible at bottom of page)
+         ==================================================================== -->
+    <section id="sec-sinai" class="app-section">
+      <div class="section-quote-slot" data-slot="sinai_quote"></div>
+      <div class="glass-card" style="text-align:center; border-color:#f59e0b; background:linear-gradient(135deg, rgba(6,78,59,0.75), rgba(15,23,42,0.9));">
+        <h2 class="card-title" style="justify-content:center; font-size:1.55rem;">🫒 قسم زيت زيتون مزارع سيناء — ذهب سيناء السائل (طبيعي بكر 100%)</h2>
+        <p style="font-size:1rem; color:#fde68a; margin-top:6px;">
+          عصرة أولى على البارد • طبيعي بكر 100% • حموضة أقل من 0.2% • خالٍ من الكوليسترول والكيماويات • غني بفيتامينات A & E
+        </p>
+      </div>
+    </section>
+
+    <!-- Persistent Sinai Farms 100% Natural Virgin Olive Oil Showcase at the End of the Site -->
+    <div id="sinaiShowcaseCard" class="sinai-showcase-section">
+      <div class="sinai-logo-emblem">
+        <div style="font-size:1.5rem;">🫒</div>
+        <div style="font-size:0.95rem; line-height:1.1;">مزارع سيناء</div>
+        <div style="font-size:0.68rem; color:#78350f;">ذهب سيناء السائل</div>
+      </div>
+
+      <div style="text-align:center; max-width:860px; margin:0 auto;">
+        <span class="badge-pill active-fast" style="font-size:0.92rem; margin-bottom:10px;">🌿 منتج طبيعي بكر 100% — عصرة أولى على البارد</span>
+        <h2 style="font-size:2rem; font-weight:900; color:#fde68a; margin-bottom:8px;">
+          زيت زيتون مزارع سيناء — طبيعي بكر 100%
+        </h2>
+        <p style="font-size:1.08rem; color:#e2e8f0; line-height:1.8;">
+          رفيقك الأول في كل وجبة صحية داخل <strong>NileFitPro</strong>! زيت زيتون سيناء هو عصير طبيعي بكر 100% نقي لفاكهة الزيتون من مزارع شبه جزيرة سيناء المباركة، معصور على البارد (حموضة أقل من 0.2%)، خالٍ تماماً من أي معاملات كيميائية أو صناعية وخالٍ من الكوليسترول.
+        </p>
+      </div>
+
+      <!-- Full-Size Uncropped Product Photos Grid (Exact Mapping to Uploaded Photos) -->
+      <div class="sinai-gallery-grid">
+        <div class="sinai-photo-frame" onclick="openImageLightbox('assets/images/sinai_olive_1.jpg', 'زيت زيتون مزارع سيناء — ذهب سيناء السائل (طبيعي بكر 100% عصرة أولى على البارد)')">
+          <img src="assets/images/sinai_olive_1.jpg" alt="ذهب سيناء السائل زيت زيتون مزارع سيناء طبيعي بكر 100%" />
+          <div style="margin-top:10px; font-weight:800; color:#fde68a;">ذهب سيناء السائل — لو خايف على صحة قلبك خد زيت زيتون مزارع سيناء (طبيعي بكر 100%)</div>
+        </div>
+
+        <div class="sinai-photo-frame" onclick="openImageLightbox('assets/images/sinai_olive_3.jpg', 'زيت زيتون مزارع سيناء — حافظ على صحة قلبك (طبيعي بكر 100% معصور على البارد حموضة أقل من 0.2%)')">
+          <img src="assets/images/sinai_olive_3.jpg" alt="زيت زيتون مزارع سيناء طبيعي بكر 100%" />
+          <div style="margin-top:10px; font-weight:800; color:#fde68a;">حافظ على صحة قلبك — زيت زيتون طبيعي بكر 100% معصور على البارد (حموضة أقل من 0.2%)</div>
+        </div>
+
+        <div class="sinai-photo-frame" onclick="openImageLightbox('assets/images/sinai_olive_2.jpg', 'بيانات عبوة زيت زيتون سيناء الطبيعي البكر 100% الخالي من الكوليسترول')">
+          <img src="assets/images/sinai_olive_2.jpg" alt="عبوة زيت زيتون مزارع سيناء الطبيعي البكر 100%" />
+          <div style="margin-top:10px; font-weight:800; color:#fde68a;">عصير طبيعي لفاكهة الزيتون — غني بفيتامين (أ، هـ) والأحماض الدهنية الأحادية غير المشبعة</div>
+        </div>
+      </div>
+
+      <!-- Product Health Benefits (Strictly NO Price Details as requested) -->
+      <div class="grid-4" style="margin-top:24px;">
+        <div class="stat-box" style="background:rgba(0,0,0,0.4);">
+          <div style="font-size:1.6rem;">❤️</div>
+          <h4 style="color:#fde68a; margin:6px 0;">حماية القلب والشرايين</h4>
+          <p style="font-size:0.84rem; color:#cbd5e1;">غني بالأحماض الدهنية الأحادية غير المشبعة ومضادات الأكسدة التي تحفظ صحة القلب وتخفض الكوليسترول الضار.</p>
+        </div>
+        <div class="stat-box" style="background:rgba(0,0,0,0.4);">
+          <div style="font-size:1.6rem;">🧪</div>
+          <h4 style="color:#fde68a; margin:6px 0;">حموضة أقل من 0.2%</h4>
+          <p style="font-size:0.84rem; color:#cbd5e1;">عصرة أولى على البارد 100% خالٍ من أي إضافات أو معاملات كيميائية أو صناعية وخالٍ تماماً من الكوليسترول.</p>
+        </div>
+        <div class="stat-box" style="background:rgba(0,0,0,0.4);">
+          <div style="font-size:1.6rem;">✨</div>
+          <h4 style="color:#fde68a; margin:6px 0;">غني بفيتامينات A & E</h4>
+          <p style="font-size:0.84rem; color:#cbd5e1;">يدعم المناعة ونضارة البشرة واستشفاء الأنسجة العضلية ومفاصل الرياضيين بفضل فيتامين (أ، هـ).</p>
+        </div>
+        <div class="stat-box" style="background:rgba(0,0,0,0.4);">
+          <div style="font-size:1.6rem;">📞</div>
+          <h4 style="color:#fde68a; margin:6px 0;">للتواصل والاستفسار المباشر</h4>
+          <p style="font-size:0.95rem; font-weight:900; color:#34d399; direction:ltr;">01011805464</p>
+          <p style="font-size:0.8rem; color:#cbd5e1;">محمد عوض خير — تليفونياً أو واتساب أو تليجرام</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Smart Motivational Notification & Daily Gym Reminder Floating Toast -->
+  <div id="smartGymNotificationToast" class="gym-toast-card" role="status" aria-live="polite">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span class="badge-pill active-fast" style="font-size:0.78rem;">🔔 إشعار تحفيزي وتذكير الجيم اليومي</span>
+      <button class="ctrl-btn" style="padding:2px 8px; font-size:0.76rem;" onclick="closeSmartGymNotification()">✖ إغلاق</button>
+    </div>
+    <div id="toastMotivationalQuote" style="font-size:0.95rem; font-weight:800; color:#fde68a; line-height:1.6; margin-bottom:8px;"></div>
+    <div id="toastGymScheduleReminder" style="font-size:0.82rem; color:#a7f3d0; background:rgba(0,0,0,0.35); padding:8px 10px; border-radius:10px; margin-bottom:10px; line-height:1.55;"></div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+      <button class="ctrl-btn" style="font-size:0.78rem; flex:1; justify-content:center;" onclick="triggerSmartGymNotification(true)">🎲 جملة وتذكير آخر</button>
+      <button class="ctrl-btn gold-btn" style="font-size:0.78rem;" onclick="downloadCurrentToastQuotePNG()">📥 حفظ PNG</button>
+      <button class="ctrl-btn active" style="font-size:0.78rem;" onclick="closeSmartGymNotification(); switchAppSection('sec-workouts', document.querySelector('[data-sec=sec-workouts]'));">🏋️ ابدأ التمرين</button>
+    </div>
+  </div>
+
+  <!-- Cartoon Recipe Preparation Video Modal -->
+  <div id="recipeVideoModal" class="modal-backdrop" onclick="if(event.target===this) window.CartoonRecipePlayer.close()">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 id="recipeModalTitle" style="color:var(--accent-gold-light); font-size:1.2rem;"></h3>
+        <button class="ctrl-btn" onclick="window.CartoonRecipePlayer.close()">✖ إغلاق الفيديو</button>
+      </div>
+      <div class="cartoon-stage-wrap">
+        <canvas id="recipeCartoonCanvas" class="cartoon-canvas" width="660" height="340"></canvas>
+      </div>
+      <div id="recipeModalDetails"></div>
+    </div>
+  </div>
+
+  <!-- Full-Resolution Uncropped Image Lightbox Modal -->
+  <div id="imageLightboxModal" class="modal-backdrop" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal-box" style="text-align:center; max-width:960px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <strong id="lightboxCaption" style="color:#fde68a;"></strong>
+        <button class="ctrl-btn" onclick="document.getElementById('imageLightboxModal').classList.remove('open')">✖ إغلاق</button>
+      </div>
+      <img id="lightboxFullImg" src="" alt="Full Product View" style="max-width:100%; height:auto; max-height:80vh; object-fit:contain; border-radius:12px;" />
+    </div>
+  </div>
+
+  <!-- Footer with Exact Credits & Social / Contact Links -->
+  <footer class="app-footer">
+    <h3 style="font-size:1.35rem; font-weight:900; color:#fde68a; margin-bottom:10px;">
+      تم بحمد الله وتوفيقه برمجة وتصميم هذا الموقع بواسطة Gemini 4 Argon وبمساعدة محمد عوض خير
+    </h3>
+    <p style="font-size:0.95rem; color:#cbd5e1; max-width:820px; margin:0 auto 14px;">
+      NileFitPro — رفيقك المتكامل للنظام الغذائي المحسوب بالجرامات (66,880+ وجبة صحية)، التمارين الميكانيكية الصحيحة 100%، المصحف الكامل (20 قارئاً)، الأذكار والأشهر الحُرُم، وزيت زيتون مزارع سيناء البكر الطبيعي 100%.
+    </p>
+
+    <div class="social-links-row">
+      <a href="https://www.youtube.com/@abouawd" target="_blank" rel="noopener noreferrer" class="social-btn youtube">
+        📺 قناة اليوتيوب (@abouawd)
+      </a>
+      <a href="tel:01011805464" class="social-btn phone">
+        📞 اتصال تليفوني: 01011805464
+      </a>
+      <a href="https://wa.me/201011805464" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp">
+        💬 واتساب: 01011805464
+      </a>
+      <a href="https://t.me/+201011805464" target="_blank" rel="noopener noreferrer" class="social-btn telegram">
+        ✈️ تليجرام: 01011805464
+      </a>
+      <a href="https://www.linkedin.com/in/mohammed-awd-kheir-898424205/" target="_blank" rel="noopener noreferrer" class="social-btn linkedin">
+        💼 حساب لينكد إن (Mohammed Awd Kheir)
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modular Application Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/sky-audio.js"></script>
+  <script src="js/nutrition-data.js"></script>
+  <script src="js/workouts-data.js"></script>
+  <script src="js/islamic-hub.js"></script>
+  <script src="js/tools-exports.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
